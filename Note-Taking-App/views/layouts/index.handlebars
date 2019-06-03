@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/main.css">
+    <title>Simple Note Taking App</title>
+</head>
+
+<body>
+
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link" href="logout">
+                <span style="font-size: 2.5em; color: Tomato;">
+                <i class="fas fa-sign-out-alt"></i>
+                </span>
+                </a>
+        </li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="/NotesWords" method="POST" id="form">
+                <h2 class="text-monospace">{{username}}'s notes</h2>
+                    <br>
+                    <br>
+                    <h3>Content</h3>
+                    <textarea rows="1" cols="50" type='text' name="data" id="content"
+                        placeholder="Drop your note here..."></textarea>
+                    <br>
+                    <br>
+                </form>
+                <button type="submit" form="form" value="Submit" class="btn btn-success" id="post" disabled>New
+                    Post</button>
+                <button class="btn btn-primary" id="edit" disabled>Edit</button>
+                <button class="btn btn-danger" id="delete" disabled>Delete</button>
+                <br>
+                <br>
+            </div>
+            <div class="col">
+                {{{body}}}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   
+
+    <script>
+        let buttonContent
+        let contentId
+        $(".contentButton").click(function (event) {
+            event.preventDefault();
+            contentId = $(event.currentTarget).data('id');
+            content = $(event.currentTarget).text();
+            console.log(contentId);
+            console.log(content)
+            axios.get("/notesWords/" + contentId)
+                .then(res => $('#content').val(res.data))
+            $("#delete").attr("disabled", false)
+        });
+        $('#content').click(function () {
+            $('#content').mouseleave(function () {
+                let content = $("#content").val();
+                if (content === "") {
+                    $("#post").attr("disabled", true)
+                } else {
+                    $("#post").attr("disabled", false)
+                    $("#edit").attr("disabled", false)
+                }
+            })
+        })
+{{!-- location.reload()) --}}
+        $("#delete").click(function () {
+            console.log(contentId)
+            axios.delete("/notesWords/" + contentId)
+                .then(res =>{
+                console.log(res.data)
+                    location.reload()
+                })
+        })
+        $("#content").mouseleave(function (event) {
+            buttonContent = $(event.currentTarget).val();
+            console.log(buttonContent);
+        })
+        $("#edit").click(function () {
+            console.log(buttonContent)
+            axios.put("/notesWords/" + contentId + "?name=" + buttonContent)
+                .then(res =>
+                    location.reload())
+        })
+    </script>
+
+
+
+</body>
+
+
+</html>
+
+ {{!-- 
+    <button id="get" style="display: inline-block"><a href="/NotesWords">Get</a></button>
+    <button class="GetParticular" style="display: inline-block">
+        GetParticular
+        <form class="textExtend" action="/NotesWords/oneuser" method="POST">
+            <input type='text'/ name="id">
+            <input type='submit' value="Submit" />
+        </form>
+    </button>
+    <button class="postButton">
+        Post
+        <form class="textExtend" action="/NotesWords" method="POST">
+            <input type='text' name="data" />
+            <input type='submit' value="Submit" />
+        </form>
+    </button>
+    <button class="putButton">
+        Put
+        <form class="textExtend" action="/NotesWords/" method="PUT">
+            <input type='text' id="putId" />
+            <input type='text' id= "typeValue" />
+            <input type='submit' value="Submit" id="putSubmit" />
+        </form>
+    </button>
+    <button class="deleteButton">
+        Delete
+        <form class="textExtend" action="/NotesWords/" method="DELETE">
+            <input type='text' id="deleteId" />
+            <input type='submit' value="Submit" id="deleteSubmit" />
+        </form>
+    </button>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+    <script> $(".postButton").click(function () {
+            $(".textExtend").toggle();
+        });
+        $(".GetParticular").click(function () {
+            $(".textExtend").toggle();
+        });
+        $(".deleteButton").click(function () {
+            $(".textExtend").toggle();
+        });
+        $(".putButton").click(function () {
+            $(".textExtend").toggle();
+        });
+        // if you use get method to get particular data 
+        // $("#getsubmit").click(function(){
+        //    let id = $("#getid").val();
+        //    console.log(id);
+        //    console.log(typeof id);
+        //     $.ajax(`/NotesWords/${id}`)
+        //     .then(function(result) {
+        //         console.log(result);
+        //     })
+        // })
+        //use front end to fentch data from backend
+        $("#deleteSubmit").click(function () {
+            let id = $("#deleteId").val();
+            console.log(id);
+            console.log(typeof id);
+            $.ajax({
+                type: 'DELETE',
+                url: `/NotesWords/${id}`
+                // data: {name: 'new'} if put method
+            });
+        })
+        //use front end to fentch data from backend
+        $("#putSubmit").click(function () {
+            let id = $("#putId").val();
+            let typeValue = $("#typeValue").val();
+            console.log(id);
+            console.log(typeValue);
+            console.log(typeof id);
+            console.log(typeof typeValue);
+            $.ajax({
+                type: 'PUT',
+                url: `/NotesWords/${id}?data=typeValue`,
+                data: { name: typeValue }  //req.body.name
+            });
+        })
+    </script> --}}
+
+    

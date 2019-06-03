@@ -1,0 +1,34 @@
+.yellowButt {
+  height:100px !important;
+  width:80%;
+  background-color: rgb(254,252,135) !important;
+  border-radius: 25px !important;
+}
+
+
+
+textarea {
+    border-radius: 15px;
+    width: 100%;
+    height: 250px
+  }
+
+ 
+body{
+  background-color: rgb(230, 232, 235);
+}
+
+.container {
+  background-color: white;
+  border-radius: 15px !important;
+}
+
+p{
+  text-align: justify;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important; 
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  color: black !important
+}
