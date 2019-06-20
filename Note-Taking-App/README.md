@@ -1,7 +1,8 @@
 # Note-Taking-App
-Installation
-npm install
 
-Run the apps
+Installation
 in the file directory,
+type
+npm install
+then type
 nodemon app.js
