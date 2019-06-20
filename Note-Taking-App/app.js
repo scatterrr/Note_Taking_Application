@@ -45,7 +45,7 @@ app.use("/logout", auth.cancelAuth, (req, res, next) => {
 })
 
 const hostname = 'localhost';
-const port = 3000
+const port = process.env.DB_LOCALPORT
 
 app.listen(port, hostname, function () {
     console.log(`The ${hostname} server listening port ${port}`)
