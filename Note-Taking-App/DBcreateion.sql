@@ -1,12 +1,12 @@
 CREATE TABLE "note_users" (
   "id" SERIAL PRIMARY KEY,
   "username" varchar UNIQUE NOT NULL,
-  "password" int
+  "password" int NOT NULL
 );
 
 CREATE TABLE "note" (
   "id" SERIAL,
-  "user_id" varchar,
+  "user_id" int,
   "content" varchar
 );
 
